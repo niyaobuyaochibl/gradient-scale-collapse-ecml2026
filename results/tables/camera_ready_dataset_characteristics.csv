@@ -1,0 +1,7 @@
+dataset,domain,users,items,train_interactions
+MovieLens-1M,Movies,6040,3416,797275
+Amazon Fine Food,Food reviews,6690,1769,43112
+Amazon Books,Book reviews,12129,14710,291042
+Amazon CDs,Music reviews,15592,16184,414228
+Yelp,Local business reviews,99165,56696,2173523
+MIND,News,50000,7713,185581

@@ -1,0 +1,28 @@
+\begin{table}[t]
+  \centering
+  \caption{Main full-ranking performance from the ECML-PKDD 2026 ADS camera-ready paper. Values are mean over 5 seeds.}
+  \label{tab:extended-fusion-summary}
+  \begin{tabular}{llrrrrrr}
+    \toprule
+    \textbf{Method} & \textbf{Metric} & \textbf{ML-1M} & \textbf{Amazon FF} & \textbf{A-Books} & \textbf{A-CDs} & \textbf{Yelp} & \textbf{MIND} \\
+    \midrule
+    LightGCN-only & R@10 & .0525 & .5262 & .0243 & .0317 & .0179 & .0658 \\
+    Fixed ($\lambda=0.5$) & R@10 & .0513 & .6272 & .0174 & .0236 & .0082 & .0563 \\
+    GradNorm-only & R@10 & --- & .6166 & .0342 & .0500 & .0242 & .0534 \\
+    GBAF (full) & R@10 & .0528 & .6178 & .0328 & .0496 & .0245 & .0591 \\
+    Concat-MLP & R@10 & .0494 & .5504 & .0250 & .0372 & .0219 & .0555 \\
+    BM3 & R@10 & .0418 & .4340 & --- & --- & .0310 & .0662 \\
+    LATTICE & R@10 & .0510 & .5535 & --- & --- & .0306 & .0482 \\
+    FREEDOM & R@10 & .0593 & .5401 & --- & --- & .0356 & .0648 \\
+    \midrule
+    LightGCN-only & N@10 & .0739 & .4714 & .0116 & .0165 & .0125 & .0309 \\
+    Fixed ($\lambda=0.5$) & N@10 & .0688 & .5963 & .0084 & .0119 & .0058 & .0278 \\
+    GradNorm-only & N@10 & --- & .5788 & .0168 & .0253 & .0165 & .0274 \\
+    GBAF (full) & N@10 & .0668 & .5766 & .0160 & .0251 & .0167 & .0303 \\
+    Concat-MLP & N@10 & .0636 & .5061 & .0122 & .0185 & .0143 & .0271 \\
+    BM3 & N@10 & .0623 & .3583 & --- & --- & .0211 & .0320 \\
+    LATTICE & N@10 & .0708 & .5145 & --- & --- & .0206 & .0235 \\
+    FREEDOM & N@10 & .0784 & .4589 & --- & --- & .0239 & .0291 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

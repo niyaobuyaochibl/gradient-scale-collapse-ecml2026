@@ -1,0 +1,53 @@
+# Extended Study – MovieLens-1M Fixed Fusion (λ=0.5)
+
+experiment_name: "ml1m_fixed_baseline_ext"
+experiment_group: "movielens_extended"
+
+data:
+  dataset: "movielens-1m"
+  data_dir: "datasets/ml-1m"
+
+model:
+  type: "fixed_fusion"
+  n_users: 6040
+  n_items: 3416
+  embedding_dim: 64
+  text_dim: 384
+  lambda_fixed: 0.5
+
+training:
+  batch_size: 1024
+  learning_rate: 0.003
+  num_epochs: 50
+  early_stopping_patience: 10
+  optimizer: "adam"
+  weight_decay: 1e-5
+  loss_type: "bpr"
+  negative_sampling: 4
+
+evaluation:
+  metrics: ["recall", "ndcg", "hit", "mrr"]
+  k_list: [10]
+  eval_batch_size: 512
+  eval_frequency: 1
+
+text_encoder:
+  use_precomputed: true
+  encoder_alias: "minilm"
+  encoder_name: "sentence-transformers/all-MiniLM-L6-v2"
+  embedding_file: "embeddings/ml-1m/all-MiniLM-L6-v2.pkl"
+
+grad_balance:
+  method: "none"
+  log_grads: true
+  target_ratio: 1.0
+  max_scale: 5.0
+
+logging:
+  log_frequency: 100
+  save_model: true
+  checkpoint_dir: "checkpoints/"
+
+device: "auto"  # defaults to cuda if available, else cpu
+
+
