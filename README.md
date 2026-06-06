@@ -7,9 +7,9 @@ Official artifact for the ECML-PKDD 2026 Applied Data Science Track paper:
 
 ## What This Repository Contains
 
-This repository provides the training code, portable final configurations, analysis scripts, and verified aggregate result tables used for the camera-ready paper. It studies a failure mode of additive text-CF fusion in which branch-scale imbalance can make text injection harmful, then evaluates an early diagnostic and a minimal branch-normalization repair.
+This repository is a minimal reproducibility artifact containing the executable training and evaluation code, final configurations, analysis scripts, and aggregate result tables used for the paper. It studies a failure mode of additive text-CF fusion in which branch-scale imbalance can make text injection harmful, then evaluates an early diagnostic and a minimal branch-normalization repair.
 
-The final paper uses a **BPR-trained latent-factor model (BPR-MF)** as the CF backbone. No graph propagation is used. Some historical result directories and legacy root-level configuration filenames contain `lightgcn_only`; those names are retained only to preserve run provenance. In those configurations, `fixed_fusion` with `lambda_fixed: 0.0` is exactly the paper's CF-only BPR-MF baseline.
+The executable CF backbone is a latent-factor model that learns user and item embeddings with the pairwise BPR ranking objective. It does not perform graph propagation.
 
 ## Main Components
 
@@ -34,11 +34,11 @@ Raw datasets are not redistributed. Place processed `train.pkl`, `val.pkl`, `tes
 
 ## Final Configurations
 
-Paper-facing configurations are in [`configs/final`](configs/final). These files use portable paths and paper terminology. Root-level `configs/*.yaml` files are retained as legacy experiment provenance and are not the authoritative camera-ready configuration set.
+Paper-facing configurations are in [`configs/final`](configs/final). These are the only released experiment configurations and use portable paths and paper terminology.
 
 | Paper method | Configuration pattern |
 |---|---|
-| CF-only (BPR-MF) | `configs/final/*_cf_only.yaml` |
+| CF-only latent-factor model | `configs/final/*_cf_only.yaml` |
 | Fixed `lambda=0.5` | `configs/final/*_fixed.yaml` |
 | BranchNorm-only | `configs/final/*_branch_norm.yaml` |
 | GBAF | `configs/final/*_gbaf.yaml` |
@@ -68,7 +68,6 @@ Run the five paper seeds (`42`, `123`, `999`, `2024`, `2025`) for each method. T
 - `results/tables/camera_ready_main_results.csv`: controlled six-dataset means reported in the paper.
 - `results/tables/camera_ready_ablation_results.csv`: full ablation and repair aggregates.
 - `results/tables/significance_camera_ready.csv`: paired five-seed tests reported in the supplement.
-- `results/tables/diagnostic_boundaries.tex`: early-diagnosis metrics and scheduled-epoch savings.
 - `analysis/build_ecml_main_table.py`: exports a LaTeX table from the verified controlled CSV.
 - `analysis/significance_ecml.py`: recomputes paired tests when raw per-seed JSON files are available.
 - `analysis/early_diagnosis.py`: reproduces the LODO diagnosis metrics and scheduled-epoch savings from the included 30-case feature table.
@@ -82,7 +81,6 @@ The aggregate values in `results/tables/` were cross-checked against the per-see
 ```text
 code/                 Training and model implementation
 configs/final/        Authoritative camera-ready experiment configs
-configs/*.yaml        Legacy experiment-provenance configs
 analysis/             Aggregation, significance, and diagnostic scripts
 scripts/              Experiment and preprocessing helpers
 results/tables/       Verified aggregate paper tables
