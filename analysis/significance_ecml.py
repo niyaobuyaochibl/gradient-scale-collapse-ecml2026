@@ -12,12 +12,12 @@ import numpy as np
 from scipy import stats
 
 RUN_DIRS = {
-    "MovieLens-1M": {"BPR-MF": "movielens_lightgcn_only", "Fixed": "ml1m/fixed", "GBAF": "movielens_gbaf"},
-    "Amazon Fine Food": {"BPR-MF": "amazon_lightgcn_only", "Fixed": "amazonff/fixed", "GBAF": "amazon_gbaf"},
-    "Amazon Books": {"BPR-MF": "amazon_books_lightgcn_only", "Fixed": "amazon_books_fixed_baseline", "GBAF": "amazon_books_gbaf"},
-    "Amazon CDs": {"BPR-MF": "amazon_cds_lightgcn_only", "Fixed": "amazon_cds_fixed_baseline", "GBAF": "amazon_cds_gbaf"},
-    "Yelp": {"BPR-MF": "yelp_lightgcn_only", "Fixed": "yelp/fixed", "GBAF": "yelp/gbaf"},
-    "MIND": {"BPR-MF": "mind_lightgcn_only", "Fixed": "mind/fixed", "GBAF": "mind/gbaf"},
+    "MovieLens-1M": {"BPR-MF": "movielens/cf_only", "Fixed": "movielens/fixed", "GBAF": "movielens/gbaf"},
+    "Amazon Fine Food": {"BPR-MF": "amazon_ff/cf_only", "Fixed": "amazon_ff/fixed", "GBAF": "amazon_ff/gbaf"},
+    "Amazon Books": {"BPR-MF": "amazon_books/cf_only", "Fixed": "amazon_books/fixed", "GBAF": "amazon_books/gbaf"},
+    "Amazon CDs": {"BPR-MF": "amazon_cds/cf_only", "Fixed": "amazon_cds/fixed", "GBAF": "amazon_cds/gbaf"},
+    "Yelp": {"BPR-MF": "yelp/cf_only", "Fixed": "yelp/fixed", "GBAF": "yelp/gbaf"},
+    "MIND": {"BPR-MF": "mind/cf_only", "Fixed": "mind/fixed", "GBAF": "mind/gbaf"},
 }
 
 
