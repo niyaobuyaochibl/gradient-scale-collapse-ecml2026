@@ -45,4 +45,4 @@ logging:
   log_frequency: 200
   save_model: false
 device: auto
-paper_method: BranchNorm-only; independent unit-norm branch-gradient scaling
+paper_method: GBAF w/o GradNorm; branch normalization disabled
