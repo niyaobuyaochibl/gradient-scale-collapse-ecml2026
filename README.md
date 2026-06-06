@@ -9,7 +9,7 @@ Official artifact for the ECML-PKDD 2026 Applied Data Science Track paper:
 
 This repository is a minimal reproducibility artifact containing the executable training and evaluation code, final configurations, analysis scripts, and aggregate result tables used for the paper. It studies a failure mode of additive text-CF fusion in which branch-scale imbalance can make text injection harmful, then evaluates an early diagnostic and a minimal branch-normalization repair.
 
-The executable CF backbone is a latent-factor model that learns user and item embeddings with the pairwise BPR ranking objective. It does not perform graph propagation.
+The executable CF backbone is a latent-factor model that learns user and item embeddings with the pairwise BPR ranking objective. 
 
 ## Main Components
 
