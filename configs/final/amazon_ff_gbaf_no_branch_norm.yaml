@@ -41,4 +41,4 @@ training:
   num_epochs: 50
   optimizer: adam
   weight_decay: 1.0e-05
-paper_method: BranchNorm-only; independent unit-norm branch-gradient scaling
+paper_method: GBAF w/o GradNorm; branch normalization disabled
