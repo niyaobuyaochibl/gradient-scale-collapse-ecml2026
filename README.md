@@ -9,13 +9,13 @@ Official artifact for the ECML-PKDD 2026 Applied Data Science Track paper:
 
 This repository is a minimal reproducibility artifact containing the executable training and evaluation code, final configurations, analysis scripts, and aggregate result tables used for the paper. It studies a failure mode of additive text-CF fusion in which branch-scale imbalance can make text injection harmful, then evaluates an early diagnostic and a minimal branch-normalization repair.
 
-The executable CF backbone is a latent-factor model that learns user and item embeddings with the pairwise BPR ranking objective. 
+The executable CF backbone is a latent-factor model that learns user and item embeddings with the pairwise BPR ranking objective.
 
 ## Main Components
 
 1. **Fixed additive fusion:** `e_i^CF + 0.5 e_i^text`.
 2. **GBAF:** an item-conditioned scalar gate using normalized popularity, CF confidence, and their interaction.
-3. **BranchNorm:** independent unit-norm rescaling of the CF-embedding and text-projection parameter gradients. The implementation key is `grad_balance.method: independent`.
+3. **GradNorm-only (implemented as BranchNorm):** independent unit-norm rescaling of the CF-embedding and text-projection parameter gradients. The paper uses the label GradNorm-only; the repository uses BranchNorm to identify this exact operation. The implementation key is `grad_balance.method: independent`.
 4. **Concat-MLP:** a non-gated architecture control.
 5. **Early diagnosis:** a leave-one-dataset-out rule based on first-`K`-epoch gradient-ratio trajectories and validation gaps.
 
@@ -40,7 +40,7 @@ Paper-facing configurations are in [`configs/final`](configs/final). These are t
 |---|---|
 | CF-only latent-factor model | `configs/final/*_cf_only.yaml` |
 | Fixed `lambda=0.5` | `configs/final/*_fixed.yaml` |
-| BranchNorm-only | `configs/final/*_branch_norm.yaml` |
+| GradNorm-only (BranchNorm implementation) | `configs/final/*_branch_norm.yaml` |
 | GBAF | `configs/final/*_gbaf.yaml` |
 | Concat-MLP | `configs/final/*_concat_mlp.yaml` |
 
