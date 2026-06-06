@@ -3,7 +3,7 @@ experiment_group: "amazon_cds_extended"
 
 data:
   dataset: "amazon_cds"
-  data_dir: "datasets/amazon_cds"
+  data_dir: "../datasets/amazon_cds"
 
 model:
   type: "concat_mlp_fusion"
@@ -36,7 +36,7 @@ text_encoder:
   use_precomputed: true
   encoder_alias: "minilm"
   encoder_name: "sentence-transformers/all-MiniLM-L6-v2"
-  embedding_file: "embeddings/amazon_cds/all-MiniLM-L6-v2.pkl"
+  embedding_file: "../embeddings/amazon_cds/all-MiniLM-L6-v2.pkl"
 
 grad_balance:
   method: "none"

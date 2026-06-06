@@ -1,0 +1,13 @@
+dataset,comparison,n_seeds,recall_t,recall_p,recall_cohen_d,significant,note
+MovieLens-1M,GBAF vs Fixed,5,10.82,4.1e-4,4.84,yes,
+MovieLens-1M,GBAF vs BPR-MF,5,0.42,0.695,0.19,no,
+Amazon Fine Food,GBAF vs Fixed,5,-12.53,2.3e-4,-5.60,yes,Fixed better
+Amazon Fine Food,GBAF vs BPR-MF,5,51.77,8.3e-7,23.15,yes,
+Amazon Books,GBAF vs Fixed,5,26.69,1.2e-5,11.94,yes,
+Amazon Books,GBAF vs BPR-MF,5,12.29,2.5e-4,5.50,yes,
+Amazon CDs,GBAF vs Fixed,5,13.81,1.6e-4,6.18,yes,
+Amazon CDs,GBAF vs BPR-MF,5,12.93,2.1e-4,5.78,yes,
+Yelp,GBAF vs Fixed,5,90.46,9.0e-8,40.45,yes,
+Yelp,GBAF vs BPR-MF,5,22.55,2.3e-5,10.09,yes,
+MIND,GBAF vs Fixed,5,1.38,0.240,0.62,no,
+MIND,GBAF vs BPR-MF,5,-7.02,2.2e-3,-3.14,yes,CF better

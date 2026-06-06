@@ -1,9 +1,9 @@
 data:
   dataset: yelp
-  data_dir: datasets/yelp
+  data_dir: ../datasets/yelp
 
 text_encoder:
-  embedding_file: embeddings/yelp/all-MiniLM-L6-v2.pkl
+  embedding_file: ../embeddings/yelp/all-MiniLM-L6-v2.pkl
 
 model:
   type: concat_mlp_fusion

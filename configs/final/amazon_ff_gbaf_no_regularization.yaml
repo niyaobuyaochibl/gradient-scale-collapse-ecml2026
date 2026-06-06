@@ -1,0 +1,43 @@
+data:
+  data_dir: ../../datasets/amazon_fine_food
+  dataset: amazon_fine_food
+device: auto
+evaluation:
+  eval_batch_size: 512
+  k_list:
+  - 10
+  metrics:
+  - recall
+  - ndcg
+experiment_name: amazon_ff_gbaf_no_regularization
+grad_balance:
+  eps: 1.0e-08
+  log_grads: true
+  method: independent
+logging:
+  log_frequency: 100
+  save_model: false
+model:
+  embedding_dim: 64
+  hidden_sizes:
+  - 32
+  - 16
+  n_items: 1769
+  n_users: 6690
+  text_dim: 384
+  type: gbaf_fusion
+regularization:
+  lambda_alpha: 0.0
+  lambda_beta: 0.0
+text_encoder:
+  embedding_file: ../../embeddings/amazon_fine_food/all-MiniLM-L6-v2.pkl
+  use_precomputed: true
+training:
+  batch_size: 1024
+  early_stopping_patience: 10
+  learning_rate: 0.003
+  loss_type: bpr
+  negative_sampling: 4
+  num_epochs: 50
+  optimizer: adam
+  weight_decay: 1.0e-05

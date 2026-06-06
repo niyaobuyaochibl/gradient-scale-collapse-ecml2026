@@ -29,8 +29,16 @@ DATASETS: Dict[str, Dict[str, str]] = {
         "output_key": "ml-1m",
     },
     "amazonff": {
-        "text_path": "datasets/amazon_fine_food_300k/item_texts.pkl",
+        "text_path": "datasets/amazon_fine_food/item_texts.pkl",
         "output_key": "amazon_fine_food",
+    },
+    "amazon_books": {
+        "text_path": "datasets/amazon_books/item_texts.pkl",
+        "output_key": "amazon_books",
+    },
+    "amazon_cds": {
+        "text_path": "datasets/amazon_cds/item_texts.pkl",
+        "output_key": "amazon_cds",
     },
     "yelp": {
         "text_path": "datasets/yelp/item_texts.pkl",
@@ -116,7 +124,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("encoder", help="Encoder alias or HF model name (minilm/mpnet/roberta/simcse)")
     parser.add_argument("--batch-size", type=int, default=64, help="Encoding batch size")
     parser.add_argument("--device", default="cpu", help="Torch device (cpu or cuda)")
-    parser.add_argument("--output-dir", default="data/extended_fusion/embeddings", help="Root directory for outputs")
+    parser.add_argument("--output-dir", default="embeddings", help="Root directory for outputs")
     parser.add_argument("--cache-dir", default=None, help="Optional HuggingFace cache directory")
     parser.add_argument("--mirror", action="store_true", help="Use HuggingFace mirror endpoint")
     parser.add_argument("--force", action="store_true", help="Overwrite existing embedding file")

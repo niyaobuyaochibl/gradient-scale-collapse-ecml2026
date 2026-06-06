@@ -3,7 +3,7 @@ experiment_group: "yelp_repair_compare"
 
 data:
   dataset: "yelp"
-  data_dir: "datasets/yelp"
+  data_dir: "../datasets/yelp"
 
 model:
   type: "attention_fusion"
@@ -48,7 +48,7 @@ text_encoder:
   use_precomputed: true
   encoder_alias: "minilm"
   encoder_name: "sentence-transformers/all-MiniLM-L6-v2"
-  embedding_file: "embeddings/yelp/all-MiniLM-L6-v2.pkl"
+  embedding_file: "../embeddings/yelp/all-MiniLM-L6-v2.pkl"
 
 logging:
   log_frequency: 200

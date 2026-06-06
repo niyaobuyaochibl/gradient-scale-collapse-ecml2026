@@ -1,0 +1,46 @@
+experiment_name: mind_gbaf_no_branch_norm
+experiment_group: mind_repair_compare
+data:
+  dataset: mind
+  data_dir: ../../datasets/mind
+model:
+  type: gbaf_fusion
+  hidden_sizes:
+  - 64
+  - 16
+  n_users: 50000
+  n_items: 7713
+  embedding_dim: 64
+  text_dim: 384
+regularization:
+  lambda_alpha: 0.05
+  lambda_beta: 0.001
+grad_balance:
+  method: none
+  log_grads: true
+  eps: 1e-8
+training:
+  batch_size: 1024
+  learning_rate: 0.003
+  num_epochs: 60
+  early_stopping_patience: 10
+  optimizer: adam
+  weight_decay: 1e-5
+  loss_type: bpr
+  negative_sampling: 4
+evaluation:
+  metrics:
+  - recall
+  - ndcg
+  k_list:
+  - 10
+  eval_batch_size: 256
+  eval_frequency: 1
+text_encoder:
+  use_precomputed: true
+  embedding_file: ../../embeddings/mind/all-MiniLM-L6-v2.pkl
+logging:
+  log_frequency: 200
+  save_model: false
+device: auto
+paper_method: BranchNorm-only; independent unit-norm branch-gradient scaling

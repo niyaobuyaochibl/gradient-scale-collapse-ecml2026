@@ -1,6 +1,6 @@
 """
 Training script for text-CF fusion experiments.
-Supports: FixedFusion, AttentionFusion, ConcatMLPFusion, GradNorm, PCGrad.
+Supports: FixedFusion, AttentionFusion, GBAF, ConcatMLPFusion, BranchNorm, and PCGrad.
 """
 
 import os
@@ -276,93 +276,6 @@ def load_data(data_dir, config, config_dir: Path):
     print(f"   Embeddings: {len(item_embeddings)} items")
     
     return train_data, val_data, test_data, item_embeddings, stats
-
-
-def build_model(config, device):
-    """构建模型"""
-    model_type = config['model']['type']
-    n_users = config['model']['n_users']
-    n_items = config['model']['n_items']
-    embedding_dim = config['model']['embedding_dim']
-    text_dim = config['model']['text_dim']
-    
-    print(f"\n🔨 Building {model_type} model...")
-    
-    if model_type == 'attention_fusion':
-        attention_cfg = config['model'].get('attention', {})
-        legacy_dropout = config['model'].get('dropout')
-        if legacy_dropout is not None and 'dropout' not in attention_cfg:
-            attention_cfg = dict(attention_cfg)
-            attention_cfg['dropout'] = legacy_dropout
-
-        model = AttentionFusion(
-            n_users=n_users,
-            n_items=n_items,
-            embedding_dim=embedding_dim,
-            text_dim=text_dim,
-            attention=attention_cfg,
-            text_adapter=config['model'].get('text_adapter'),
-            device=device
-        )
-        print(f"   Attention input mode: {model.input_mode}")
-    elif model_type == 'fixed_fusion':
-        model = FixedFusion(
-            n_users=n_users,
-            n_items=n_items,
-            embedding_dim=embedding_dim,
-            text_dim=text_dim,
-            lambda_fixed=config['model']['lambda_fixed'],
-            device=device
-        )
-    elif model_type == 'gbaf_fusion':
-        hidden_sizes = config['model'].get('hidden_sizes', [32, 16])
-        model = GBAFFusion(
-            n_users=n_users,
-            n_items=n_items,
-            embedding_dim=embedding_dim,
-            text_dim=text_dim,
-            hidden_sizes=hidden_sizes,
-            device=device
-        )
-    elif model_type in {'gbaf_adaptive_fusion', 'gbaf_adaptive'}:
-        hidden_sizes = config['model'].get('hidden_sizes', [32, 16])
-        model = GBAFAdaptiveFusion(
-            n_users=n_users,
-            n_items=n_items,
-            embedding_dim=embedding_dim,
-            text_dim=text_dim,
-            hidden_sizes=hidden_sizes,
-            device=device
-        )
-    elif model_type in {'gbaf_v2_fusion', 'gbafv2_fusion'}:
-        hidden_sizes = config['model'].get('hidden_sizes', [32, 16])
-        tau_cfg = config['model'].get('temperature', {}) or {}
-        model = GBAFv2Fusion(
-            n_users=n_users,
-            n_items=n_items,
-            embedding_dim=embedding_dim,
-            text_dim=text_dim,
-            hidden_sizes=hidden_sizes,
-            tau_start=float(tau_cfg.get('tau_start', 5.0)),
-            tau_end=float(tau_cfg.get('tau_end', 1.0)),
-            device=device
-        )
-    elif model_type == 'concat_mlp_fusion':
-        mlp_cfg = config['model'].get('mlp', {}) or {}
-        model = ConcatMLPFusion(
-            n_users=n_users,
-            n_items=n_items,
-            embedding_dim=embedding_dim,
-            text_dim=text_dim,
-            mlp_hidden=mlp_cfg.get('hidden_sizes', [32, 16]),
-            activation=mlp_cfg.get('activation', 'relu'),
-            dropout=float(mlp_cfg.get('dropout', 0.1)),
-            device=device,
-        )
-    else:
-        raise ValueError(f"Unknown model type: {model_type}")
-    
-    return model
 
 
 def build_model(config, device):
@@ -697,7 +610,7 @@ def evaluate(
     item_chunk_size=4096,
 ):
     """
-    Full-ranking evaluation (MMRec-compatible):
+    Full-ranking evaluation:
     - Per-user ranking over all items
     - Mask train interactions
     - Compute user-level Recall@K / NDCG@K
@@ -857,7 +770,7 @@ def main():
     # 优化器
     optimizer = optim.Adam(model.parameters(), 
                           lr=float(config['training']['learning_rate']),
-                          weight_decay=float(config['training']['weight_decay']))
+                          weight_decay=float(config['training'].get('weight_decay', 0.0)))
     
     # 创建数据加载器
     train_dataset = RecommendationDataset(

@@ -1,28 +1,21 @@
-\begin{table}[t]
-  \centering
-  \caption{Main full-ranking performance from the ECML-PKDD 2026 ADS camera-ready paper. Values are mean over 5 seeds.}
-  \label{tab:extended-fusion-summary}
-  \begin{tabular}{llrrrrrr}
-    \toprule
-    \textbf{Method} & \textbf{Metric} & \textbf{ML-1M} & \textbf{Amazon FF} & \textbf{A-Books} & \textbf{A-CDs} & \textbf{Yelp} & \textbf{MIND} \\
-    \midrule
-    LightGCN-only & R@10 & .0525 & .5262 & .0243 & .0317 & .0179 & .0658 \\
-    Fixed ($\lambda=0.5$) & R@10 & .0513 & .6272 & .0174 & .0236 & .0082 & .0563 \\
-    GradNorm-only & R@10 & --- & .6166 & .0342 & .0500 & .0242 & .0534 \\
-    GBAF (full) & R@10 & .0528 & .6178 & .0328 & .0496 & .0245 & .0591 \\
-    Concat-MLP & R@10 & .0494 & .5504 & .0250 & .0372 & .0219 & .0555 \\
-    BM3 & R@10 & .0418 & .4340 & --- & --- & .0310 & .0662 \\
-    LATTICE & R@10 & .0510 & .5535 & --- & --- & .0306 & .0482 \\
-    FREEDOM & R@10 & .0593 & .5401 & --- & --- & .0356 & .0648 \\
-    \midrule
-    LightGCN-only & N@10 & .0739 & .4714 & .0116 & .0165 & .0125 & .0309 \\
-    Fixed ($\lambda=0.5$) & N@10 & .0688 & .5963 & .0084 & .0119 & .0058 & .0278 \\
-    GradNorm-only & N@10 & --- & .5788 & .0168 & .0253 & .0165 & .0274 \\
-    GBAF (full) & N@10 & .0668 & .5766 & .0160 & .0251 & .0167 & .0303 \\
-    Concat-MLP & N@10 & .0636 & .5061 & .0122 & .0185 & .0143 & .0271 \\
-    BM3 & N@10 & .0623 & .3583 & --- & --- & .0211 & .0320 \\
-    LATTICE & N@10 & .0708 & .5145 & --- & --- & .0206 & .0235 \\
-    FREEDOM & N@10 & .0784 & .4589 & --- & --- & .0239 & .0291 \\
-    \bottomrule
-  \end{tabular}
-\end{table}
+\begin{table*}[t]
+\centering
+\caption{Controlled full-ranking performance with the same BPR-MF backbone and frozen text features.}
+\begin{tabular}{llrrrrrr}
+\toprule
+Method & Metric & ML-1M & Amazon FF & Books & CDs & Yelp & MIND \\
+\midrule
+CF-only (BPR-MF) & Recall@10 & 0.0525 & 0.5262 & 0.0243 & 0.0317 & 0.0179 & 0.0658 \\
+Fixed lambda=0.5 & Recall@10 & 0.0513 & 0.6272 & 0.0174 & 0.0236 & 0.0082 & 0.0563 \\
+BranchNorm-only & Recall@10 & --- & 0.6166 & 0.0342 & 0.0500 & 0.0242 & 0.0534 \\
+GBAF full & Recall@10 & 0.0528 & 0.6178 & 0.0328 & 0.0496 & 0.0245 & 0.0591 \\
+Concat-MLP & Recall@10 & 0.0494 & 0.5504 & 0.0250 & 0.0372 & 0.0219 & 0.0555 \\
+\midrule
+CF-only (BPR-MF) & NDCG@10 & 0.0739 & 0.4714 & 0.0116 & 0.0165 & 0.0125 & 0.0309 \\
+Fixed lambda=0.5 & NDCG@10 & 0.0688 & 0.5963 & 0.0084 & 0.0119 & 0.0058 & 0.0278 \\
+BranchNorm-only & NDCG@10 & --- & 0.5788 & 0.0168 & 0.0253 & 0.0165 & 0.0274 \\
+GBAF full & NDCG@10 & 0.0668 & 0.5766 & 0.0160 & 0.0251 & 0.0167 & 0.0303 \\
+Concat-MLP & NDCG@10 & 0.0636 & 0.5061 & 0.0122 & 0.0185 & 0.0143 & 0.0271 \\
+\bottomrule
+\end{tabular}
+\end{table*}

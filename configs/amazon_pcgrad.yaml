@@ -3,7 +3,7 @@ experiment_group: "amazon_repair_compare"
 
 data:
   dataset: "amazon_fine_food"
-  data_dir: "datasets/amazon_fine_food_300k"
+  data_dir: "../datasets/amazon_fine_food_300k"
 
 model:
   type: "attention_fusion"
@@ -46,7 +46,7 @@ evaluation:
 
 text_encoder:
   use_precomputed: true
-  embedding_file: "embeddings/amazon_fine_food/all-MiniLM-L6-v2.pkl"
+  embedding_file: "../embeddings/amazon_fine_food/all-MiniLM-L6-v2.pkl"
 
 logging:
   log_frequency: 100

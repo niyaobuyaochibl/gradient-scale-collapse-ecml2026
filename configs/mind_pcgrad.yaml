@@ -3,7 +3,7 @@ experiment_group: "mind_repair_compare"
 
 data:
   dataset: "mind"
-  data_dir: "datasets/mind"
+  data_dir: "../datasets/mind"
 
 model:
   type: "attention_fusion"
@@ -46,7 +46,7 @@ evaluation:
 
 text_encoder:
   use_precomputed: true
-  embedding_file: "embeddings/mind/all-MiniLM-L6-v2.pkl"
+  embedding_file: "../embeddings/mind/all-MiniLM-L6-v2.pkl"
 
 logging:
   log_frequency: 200

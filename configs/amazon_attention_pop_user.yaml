@@ -5,7 +5,7 @@ experiment_group: "amazonff_extended"
 
 data:
   dataset: "amazon_fine_food"
-  data_dir: "datasets/amazon_fine_food_300k"
+  data_dir: "../datasets/amazon_fine_food_300k"
 
 model:
   type: "attention_fusion"
@@ -51,7 +51,7 @@ text_encoder:
   use_precomputed: true
   encoder_alias: "minilm"
   encoder_name: "sentence-transformers/all-MiniLM-L6-v2"
-  embedding_file: "embeddings/amazon_fine_food/all-MiniLM-L6-v2.pkl"
+  embedding_file: "../embeddings/amazon_fine_food/all-MiniLM-L6-v2.pkl"
 
 logging:
   log_frequency: 100

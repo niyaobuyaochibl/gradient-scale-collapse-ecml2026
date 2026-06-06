@@ -3,7 +3,7 @@ experiment_group: "movielens_extended"
 
 data:
   dataset: "ml-1m"
-  data_dir: "datasets/ml-1m"
+  data_dir: "../datasets/ml-1m"
 
 model:
   type: "fixed_fusion"
@@ -33,7 +33,7 @@ text_encoder:
   use_precomputed: true
   encoder_alias: "minilm"
   encoder_name: "sentence-transformers/all-MiniLM-L6-v2"
-  embedding_file: "embeddings/ml-1m/all-MiniLM-L6-v2.pkl"
+  embedding_file: "../embeddings/ml-1m/all-MiniLM-L6-v2.pkl"
 
 grad_balance:
   method: "none"

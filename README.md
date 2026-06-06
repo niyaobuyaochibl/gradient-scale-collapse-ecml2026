@@ -1,26 +1,28 @@
-# Gradient-Scale Collapse in Additive Text-CF Fusion: Early Diagnosis and Minimal Repair
+# Gradient-Scale Collapse in Additive Text-CF Fusion
 
-Official code repository for the ECML-PKDD 2026 Applied Data Science Track paper:
+Official artifact for the ECML-PKDD 2026 Applied Data Science Track paper:
 
 > **Gradient-Scale Collapse in Additive Text-CF Fusion: Early Diagnosis and Minimal Repair**  
-> Yunan Zhang, Jingjing Fan, and Yanxiao Liu  
-> ECML-PKDD 2026 Applied Data Science Track
+> Yunan Zhang, Jingjing Fan, and Yanxiao Liu
 
-## Overview
+## What This Repository Contains
 
-This repository contains the code, configurations, analysis scripts, and processed result tables used in the paper. The project studies **Gradient-Scale Collapse** in additive text-CF fusion for recommender systems and provides:
+This repository provides the training code, portable final configurations, analysis scripts, and verified aggregate result tables used for the camera-ready paper. It studies a failure mode of additive text-CF fusion in which branch-scale imbalance can make text injection harmful, then evaluates an early diagnostic and a minimal branch-normalization repair.
 
-1. **Phenomenon identification**: additive text-CF fusion can collapse when text-branch scale dominates additive training and learned-gate updates.
-2. **Architecture contrast**: concatenation fusion (Concat-MLP), which has no scalar gate, avoids this failure on collapse-prone datasets, showing that the issue is architecture-specific rather than caused by text quality alone.
-3. **Early diagnosis protocol**: a lightweight diagnostic based on first-`K`-epoch gradient-ratio trajectories `r_t` between text and CF branches.
-4. **Minimal repair**: branch-wise gradient normalization that controls gradient scale imbalance with minimal changes to an existing CF pipeline.
+The final paper uses a **BPR-trained latent-factor model (BPR-MF)** as the CF backbone. No graph propagation is used. Some historical result directories and legacy root-level configuration filenames contain `lightgcn_only`; those names are retained only to preserve run provenance. In those configurations, `fixed_fusion` with `lambda_fixed: 0.0` is exactly the paper's CF-only BPR-MF baseline.
+
+## Main Components
+
+1. **Fixed additive fusion:** `e_i^CF + 0.5 e_i^text`.
+2. **GBAF:** an item-conditioned scalar gate using normalized popularity, CF confidence, and their interaction.
+3. **BranchNorm:** independent unit-norm rescaling of the CF-embedding and text-projection parameter gradients. The implementation key is `grad_balance.method: independent`.
+4. **Concat-MLP:** a non-gated architecture control.
+5. **Early diagnosis:** a leave-one-dataset-out rule based on first-`K`-epoch gradient-ratio trajectories and validation gaps.
 
 ## Datasets
 
-The paper evaluates six public datasets under a unified full-ranking protocol.
-
 | Dataset | Domain | Users | Items | Train interactions |
-|---------|--------|------:|------:|-------------------:|
+|---|---|---:|---:|---:|
 | MovieLens-1M | Movies | 6,040 | 3,416 | 797,275 |
 | Amazon Fine Food | Food reviews | 6,690 | 1,769 | 43,112 |
 | Amazon Books | Book reviews | 12,129 | 14,710 | 291,042 |
@@ -28,21 +30,21 @@ The paper evaluates six public datasets under a unified full-ranking protocol.
 | Yelp | Local business reviews | 99,165 | 56,696 | 2,173,523 |
 | MIND | News | 50,000 | 7,713 | 185,581 |
 
-Raw datasets are not redistributed in this repository. Use the scripts in `code/datasets/` to preprocess each public dataset. Place processed files (`train.pkl`, `val.pkl`, `test.pkl`, `stats.json`) under `datasets/<dataset_name>/`. Place pre-computed Sentence-BERT embeddings under `embeddings/<dataset_name>/all-MiniLM-L6-v2.pkl`.
+Raw datasets are not redistributed. Place processed `train.pkl`, `val.pkl`, `test.pkl`, and `stats.json` files under `datasets/<dataset>/`. Place frozen Sentence-BERT embeddings under `embeddings/<dataset>/all-MiniLM-L6-v2.pkl`.
 
-## Fusion Architectures
+## Final Configurations
 
-| Method | Config key | Description |
-|--------|------------|-------------|
-| CF-only | `lightgcn_only` | LightGCN backbone without text features |
-| Fixed `lambda=0.5` | `fixed_baseline` | Additive text-CF fusion with a fixed equal-weight text coefficient |
-| Gated additive | `attention_pop_user` | Learned scalar gate conditioned on popularity and user/activity signals |
-| GradNorm | `gradnorm_only` | Additive fusion with branch-wise gradient normalization |
-| Concat-MLP | `concat_mlp` | Non-gated concatenation fusion used as the architecture control |
+Paper-facing configurations are in [`configs/final`](configs/final). These files use portable paths and paper terminology. Root-level `configs/*.yaml` files are retained as legacy experiment provenance and are not the authoritative camera-ready configuration set.
+
+| Paper method | Configuration pattern |
+|---|---|
+| CF-only (BPR-MF) | `configs/final/*_cf_only.yaml` |
+| Fixed `lambda=0.5` | `configs/final/*_fixed.yaml` |
+| BranchNorm-only | `configs/final/*_branch_norm.yaml` |
+| GBAF | `configs/final/*_gbaf.yaml` |
+| Concat-MLP | `configs/final/*_concat_mlp.yaml` |
 
 ## Quick Start
-
-### 1. Environment Setup
 
 ```bash
 python -m venv venv
@@ -50,96 +52,41 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Pre-compute Text Embeddings
-
-```bash
-python scripts/precompute_llm_embeddings.py --dataset ml-1m --encoder minilm --device cuda
-```
-
-### 3. Run a Single Experiment
+After preparing a dataset and its text embeddings:
 
 ```bash
 python code/train_fusion.py \
-    --config configs/movielens_attention_pop_user.yaml \
-    --seed 42 \
-    --output_dir results/ml1m/attention_pop_user/seed_42
+  --config configs/final/yelp_gbaf.yaml \
+  --seed 42 \
+  --output_dir results/yelp/gbaf/seed_42
 ```
 
-### 4. Run Experiment Suites
+Run the five paper seeds (`42`, `123`, `999`, `2024`, `2025`) for each method. The paper uses full ranking over all items with training interactions masked, reporting Recall@10 and NDCG@10.
 
-```bash
-bash scripts/run_concat_experiments.sh
-bash scripts/run_extended_experiments.sh ml1m
-```
+## Verified Results and Analysis
 
-### 5. Analysis
+- `results/tables/camera_ready_main_results.csv`: controlled six-dataset means reported in the paper.
+- `results/tables/camera_ready_ablation_results.csv`: full ablation and repair aggregates.
+- `results/tables/significance_camera_ready.csv`: paired five-seed tests reported in the supplement.
+- `results/tables/diagnostic_boundaries.tex`: early-diagnosis metrics and scheduled-epoch savings.
+- `analysis/build_ecml_main_table.py`: exports a LaTeX table from the verified controlled CSV.
+- `analysis/significance_ecml.py`: recomputes paired tests when raw per-seed JSON files are available.
+- `analysis/early_diagnosis.py`: reproduces the LODO diagnosis metrics and scheduled-epoch savings from the included 30-case feature table.
+- `scripts/run_camera_ready_experiments.sh`: runs the controlled final configurations over the five paper seeds.
+- `scripts/run_all_precomputes.sh`: creates MiniLM embeddings for all six datasets.
 
-```bash
-python analysis/significance_ecml.py
-python analysis/plot_gradient_ratio.py
-python analysis/diagnostic_boundaries.py
-python analysis/build_ecml_main_table.py
-```
+The aggregate values in `results/tables/` were cross-checked against the per-seed experiment outputs used to build the camera-ready paper. Large datasets, embeddings, raw run logs, checkpoints, and model weights are excluded from Git.
 
-## Repository Structure
+## Repository Layout
 
 ```text
-.
-├── README.md
-├── LICENSE
-├── requirements.txt
-├── code/
-│   ├── train_fusion.py
-│   ├── models/
-│   │   ├── attention_variants.py
-│   │   └── gbaf.py
-│   └── datasets/
-│       ├── prepare_mind_dataset.py
-│       ├── prepare_yelp_dataset.py
-│       ├── prepare_amazon_books_dataset.py
-│       ├── process_amazon_cds.py
-│       └── ...
-├── configs/
-├── analysis/
-├── scripts/
-└── results/tables/
+code/                 Training and model implementation
+configs/final/        Authoritative camera-ready experiment configs
+configs/*.yaml        Legacy experiment-provenance configs
+analysis/             Aggregation, significance, and diagnostic scripts
+scripts/              Experiment and preprocessing helpers
+results/tables/       Verified aggregate paper tables
 ```
-
-## Evaluation Protocol
-
-- **Ranking protocol**: full ranking over all candidate items with training interactions masked.
-- **Metrics**: Recall@10 and NDCG@10 in the main paper; additional metrics are produced by analysis scripts.
-- **Seeds**: `42`, `123`, `999`, `2024`, and `2025`.
-- **Early stopping**: validation Recall@10 with patience 10.
-- **Text encoder**: frozen Sentence-BERT `all-MiniLM-L6-v2` embeddings unless otherwise specified.
-
-## Key Configuration Options
-
-Each YAML config controls the model, gradient balancing, and training settings:
-
-```yaml
-model:
-  type: "attention_fusion"    # fixed_fusion | attention_fusion | concat_mlp_fusion
-  embedding_dim: 64
-  text_dim: 384
-
-grad_balance:
-  method: "none"              # none | gradnorm | independent | pcgrad
-  log_grads: true
-  target_ratio: 1.0
-
-training:
-  loss_type: "bpr"
-  batch_size: 1024
-  learning_rate: 0.003
-  num_epochs: 50
-  early_stopping_patience: 10
-  negative_sampling: 4
-```
-
-## Reproducibility Notes
-
-The repository includes the scripts used to aggregate tables, run significance tests, and generate diagnostic plots. Large raw datasets, processed interaction files, embeddings, checkpoints, and model weights are intentionally excluded from version control. The `.gitignore` file documents the expected local directories for those artifacts.
 
 ## Citation
 
@@ -147,11 +94,12 @@ The repository includes the scripts used to aggregate tables, run significance t
 @inproceedings{zhang2026gradientscale,
   title     = {Gradient-Scale Collapse in Additive Text-CF Fusion: Early Diagnosis and Minimal Repair},
   author    = {Zhang, Yunan and Fan, Jingjing and Liu, Yanxiao},
-  booktitle = {Proceedings of ECML PKDD 2026},
-  year      = {2026}
+  booktitle = {Machine Learning and Knowledge Discovery in Databases: Applied Data Science Track},
+  year      = {2026},
+  publisher = {Springer}
 }
 ```
 
 ## License
 
-This code is released under the MIT License. See `LICENSE` for details.
+MIT License. See [`LICENSE`](LICENSE).

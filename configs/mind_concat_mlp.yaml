@@ -1,9 +1,9 @@
 data:
   dataset: mind
-  data_dir: datasets/mind
+  data_dir: ../datasets/mind
 
 text_encoder:
-  embedding_file: embeddings/mind/all-MiniLM-L6-v2.pkl
+  embedding_file: ../embeddings/mind/all-MiniLM-L6-v2.pkl
 
 model:
   type: concat_mlp_fusion
